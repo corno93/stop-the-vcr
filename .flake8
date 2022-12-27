@@ -1,0 +1,39 @@
+[flake8]
+ignore =
+    # E203: whitespace before ‘:’
+    E203,
+    # E501: line too long (82 > 79 characters)
+    E501,
+    # W503: line break before binary operator
+    W503,
+    # B009: Do not call getattr(x, 'attr'), instead use normal property access: x.attr
+    B009,
+    # DJ01: Avoid using null=True on string-based fields such as CharField and TextField
+    DJ01,
+    # DJ08: Model does not define __str__ method
+    DJ08,
+
+
+
+max-complexity = 18
+max-line-length = 88
+per-file-ignores =
+    # imported but unused
+    __init__.py,conftest.py: F401,F403
+    local.py,testing.py,qa.py,staging.py,production.py:F403,F405
+exclude =
+    .git,
+    .venv,
+    __pycache__,
+    build,
+    dist,
+    bin,
+    data,
+    docs,
+    media,
+    maxmind,
+    reports,
+    static,
+    templates,
+    test,
+    gitlab-reporter
