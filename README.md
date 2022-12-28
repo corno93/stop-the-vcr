@@ -3,8 +3,9 @@
 TODO:
 - [x] comments
 - [x] update tests
-- [ ] git
+- [x] git
 - [ ] github actions
+- [ ] test on trip
 - [ ] publish
 
 A package that contains `VCR.py` custom [request matchers](https://vcrpy.readthedocs.io/en/latest/advanced.html#register-your-own-request-matcher) including:
