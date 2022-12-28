@@ -1,10 +1,12 @@
 # stop-the-vcr
 
+![python-package workflow](https://github.com/corno93/stop-the-vcr/actions/workflows/python-package.yml/badge.svg)
+
 TODO:
 - [x] comments
 - [x] update tests
 - [x] git
-- [ ] github actions
+- [x] github actions
 - [ ] test on trip
 - [ ] publish
 
