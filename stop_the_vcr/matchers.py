@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import OrderedDict
-from typing import MutableMapping
+from typing import Any
 
 import vcr
 from vcr.matchers import _get_transformer
@@ -53,12 +53,12 @@ def body_structure_and_types(r1: vcr.request.Request, r2: vcr.request.Request) -
     _assert_body_types(r1_flat, r2_flat)
 
 
-def _flatten_and_store_value_type(data: dict, parent_key: bool = False) -> dict:
+def _flatten_and_store_value_type(data: dict, parent_key: str | None = None) -> dict:
     """Flatten and replace each field's value with the value's type"""
-    flat_data = []
+    flat_data: list[tuple[str, Any]] = []
     for key, value in data.items():
         new_key = f"{parent_key}_{key}" if parent_key else key
-        if isinstance(value, MutableMapping):
+        if isinstance(value, dict):
             flat_data.extend(_flatten_and_store_value_type(value, new_key).items())
         elif isinstance(value, list):
             for k, v in enumerate(value):

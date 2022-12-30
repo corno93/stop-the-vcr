@@ -1,4 +1,5 @@
 import json
+from typing import Callable
 
 import pytest
 import vcr
@@ -20,7 +21,7 @@ def _get_vcr_request(data: dict) -> vcr.request.Request:
 
 
 def _assert_body_helper(
-    actual: dict, expected: dict, assertion_message: str, *matchers: callable
+    actual: dict, expected: dict, assertion_message: str, *matchers: Callable
 ):
     r1 = _get_vcr_request(actual)
     r2 = _get_vcr_request(expected)
