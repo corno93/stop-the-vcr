@@ -3,9 +3,9 @@ import json
 import pytest
 import vcr
 
-from matchers import body_structure
-from matchers import body_structure_and_types
-from matchers import body_types
+from stop_the_vcr.matchers import body_structure
+from stop_the_vcr.matchers import body_structure_and_types
+from stop_the_vcr.matchers import body_types
 
 
 def _get_vcr_request(data: dict) -> vcr.request.Request:
@@ -42,12 +42,12 @@ def _assert_body_helper(
         (
             {"a": 1},
             {"b": 1},
-            """Difference between actual and expected request structure: {'a'}""",
+            """Difference between actual and expected request structure: ['a']""",
         ),
         (
-            {"a": {"b": {"c": [1, 2, "3", 4]}}},
+            {"a": {"b": {"c": [1, 2, "3", 4, 5]}}},
             {"a": {"b": {"c": [1, 2, "3"]}}},
-            """Difference between actual and expected request structure: {'a_b_c_3'}""",
+            """Difference between actual and expected request structure: ['a_b_c_3', 'a_b_c_4']""",
         ),
         (
             {"a": 1},
@@ -74,9 +74,9 @@ def test_body_structure_matcher(actual, expected, assertion_message):
             """Difference between actual and expected request field types: {\'a\': "Actual type: <class \'int\'> & expected type: <class \'str\'>"}""",
         ),
         (
-            {"a": {"b": {"c": [1, 2, "3"]}}},
-            {"a": {"b": {"c": [1, 2, 3]}}},
-            """Difference between actual and expected request field types: {'a_b_c_2': "Actual type: <class 'str'> & expected type: <class 'int'>"}""",
+            {"a": {"b": {"c": [1, 2, "3", "4"]}}},
+            {"a": {"b": {"c": [1, 2, 3, 4]}}},
+            """Difference between actual and expected request field types: {'a_b_c_2': "Actual type: <class 'str'> & expected type: <class 'int'>", 'a_b_c_3': "Actual type: <class 'str'> & expected type: <class 'int'>"}""",
         ),
         ({"a": {"b": [0, 1, 2]}}, {"a": {"b": [0, 1]}, "c": 1}, None),
         (
@@ -96,12 +96,12 @@ def test_body_types_matcher(actual, expected, assertion_message):
         (
             {"a": 1},
             {"b": 1},
-            """Difference between actual and expected request structure: {'a'}""",
+            """Difference between actual and expected request structure: ['a']""",
         ),
         (
             {"a": {"b": {"c": [1, 2, "3", 4]}}},
             {"a": {"b": {"c": [1, 2, "3"]}}},
-            """Difference between actual and expected request structure: {'a_b_c_3'}""",
+            """Difference between actual and expected request structure: ['a_b_c_3']""",
         ),
         (
             {"a": 1},

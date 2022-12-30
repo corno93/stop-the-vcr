@@ -28,6 +28,7 @@ description = "A package that contains VCR.py custom request matchers"
 authors = ["Alex Cornelio <ascornelio@gmail.com>"]
 license = "MIT"
 
+
 [tool.poetry.dependencies]
 python = "^3.8.1"
 vcrpy = "^4.2.1"

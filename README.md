@@ -2,13 +2,6 @@
 
 ![python-package workflow](https://github.com/corno93/stop-the-vcr/actions/workflows/python-package.yml/badge.svg)
 
-TODO:
-- [x] comments
-- [x] update tests
-- [x] git
-- [x] github actions
-- [ ] test on trip
-- [ ] publish
 
 A package that contains `VCR.py` custom [request matchers](https://vcrpy.readthedocs.io/en/latest/advanced.html#register-your-own-request-matcher) including:
 
@@ -49,7 +42,7 @@ my_vcr = vcr.VCR(
 
 my_vcr.register_matcher("body_structure_and_types", body_structure_and_types)
 
-# Then continue using vcr as you wpuld
+# Then continue using vcr as you would
 with my_vcr.use_cassette('test.json'):
     # your http code here
     ...

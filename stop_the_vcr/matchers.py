@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import OrderedDict
 from typing import MutableMapping
 
 import vcr
@@ -31,7 +32,7 @@ def body_types(r1: vcr.request.Request, r2: vcr.request.Request) -> None:
     :param r1: The actual request
     :param r2: The expected request found in the cassette
     :returns: None
-    :raises AssertionError: if the request bodies do not have the field types"""
+    :raises AssertionError: if the request bodies do not have the same field types"""
     r1_flat, r2_flat = _prepare_data(r1, r2)
     _assert_body_types(r1_flat, r2_flat)
 
@@ -86,36 +87,39 @@ def _get_flat_request_dict(request: vcr.request.Request) -> dict:
     return flat_request_dict
 
 
+def _friendly_body_structure_assertion_message(actual: dict, expected: dict) -> list:
+    diff = list(set(actual.keys()).difference(set(expected.keys())))
+    diff.sort()
+    return diff
+
+
 def _assert_body_structure(r1_flat: dict, r2_flat: dict) -> None:
     assert (
         r1_flat.keys() == r2_flat.keys()
     ), "Difference between actual and expected request structure: {}".format(
-        set(r1_flat.keys()).difference(set(r2_flat.keys()))
+        _friendly_body_structure_assertion_message(r1_flat, r2_flat)
     )
 
 
-def _friendly_body_types_assertion_message(r1_flat: dict, r2_flat: dict) -> dict:
+def _friendly_body_types_assertion_message(actual: dict, expected: dict) -> dict:
     field_errors = {}
-    for key, actual_type in r1_flat.items():
-        try:
-            expected_type = r2_flat[key]
-        except KeyError:
-            pass
-        else:
-            if actual_type != expected_type:
-                field_errors[
-                    key
-                ] = f"Actual type: {actual_type} & expected type: {expected_type}"
+    actual = OrderedDict(sorted(actual.items()))
+    for key, actual_type in actual.items():
+        expected_type = expected[key]
+        if actual_type != expected_type:
+            field_errors[
+                key
+            ] = f"Actual type: {actual_type} & expected type: {expected_type}"
     return field_errors
 
 
 def _assert_body_types(r1_flat: dict, r2_flat: dict) -> None:
     common_keys = r1_flat.keys() & r2_flat.keys()
-    actual_common_values = {r1_flat[i] for i in common_keys}
-    expected_common_values = {r2_flat[i] for i in common_keys}
+    actual = {i: r1_flat[i] for i in common_keys}
+    expected = {i: r2_flat[i] for i in common_keys}
 
     assert (
-        actual_common_values == expected_common_values
+        actual == expected
     ), "Difference between actual and expected request field types: {}".format(
-        _friendly_body_types_assertion_message(r1_flat, r2_flat)
+        _friendly_body_types_assertion_message(actual, expected)
     )
