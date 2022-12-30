@@ -23,7 +23,7 @@ exclude = '''
 
 [tool.poetry]
 name = "stop-the-vcr"
-version = "0.1.0"
+version = "0.1.1"
 description = "A package that contains VCR.py custom request matchers"
 authors = ["Alex Cornelio <ascornelio@gmail.com>"]
 license = "MIT"
