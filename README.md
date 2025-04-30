@@ -3,7 +3,7 @@
 # stop-the-vcr
 
 ![python-package workflow](https://github.com/corno93/stop-the-vcr/actions/workflows/python-package.yml/badge.svg)
-![something](https://img.shields.io/badge/python-3.8%7C3.9%7C3.10%7C3.11%7C3.12-blue)
+![something](https://img.shields.io/badge/python-3.10%7C3.11%7C3.12-blue)
 
 </div>
 
