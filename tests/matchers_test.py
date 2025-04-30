@@ -1,5 +1,5 @@
 import json
-from typing import Callable
+from collections.abc import Callable
 
 import pytest
 import vcr
@@ -27,7 +27,6 @@ def _assert_body_helper(
     r2 = _get_vcr_request(expected)
 
     for matcher in matchers:
-
         if assertion_message:
             with pytest.raises(AssertionError) as exc:
                 matcher(r1, r2)

@@ -4,8 +4,18 @@ from collections import OrderedDict
 from typing import Any
 
 import vcr
-from vcr.matchers import _get_transformer
 from vcr.matchers import read_body
+
+
+# In v7 it is _get_transformers so here we try to import the new function name first, fall back to the old one if it fails
+try:
+    from vcr.matchers import _get_transformers as _get_transformer_func
+
+    _using_new_vcr = True
+except ImportError:
+    from vcr.matchers import _get_transformer as _get_transformer_func
+
+    _using_new_vcr = False
 
 __all__ = ["body_structure", "body_types", "body_structure_and_types"]
 
@@ -81,8 +91,19 @@ def _prepare_data(
 
 
 def _get_flat_request_dict(request: vcr.request.Request) -> dict:
-    transformer = _get_transformer(request)
-    request_dict = transformer(read_body(request))
+    transformer = _get_transformer_func(request)
+    # If using vcrpy 7+, _get_transformers returns an iterator, so we need to get the first transformer
+    if _using_new_vcr:
+        transformers = list(transformer)
+        if transformers:
+            transformer_func = transformers[0]
+            request_dict = transformer_func(read_body(request))
+        else:
+            request_dict = read_body(request)
+    else:
+        # For older vcrpy versions, _get_transformer returns a single transformer function
+        request_dict = transformer(read_body(request))
+
     flat_request_dict = _flatten_and_store_value_type(request_dict)
     return flat_request_dict
 
